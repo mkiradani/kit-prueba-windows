@@ -15,7 +15,8 @@ arrancar() { PATH="$H/falso:$PATH" CLAUDE_PLUGIN_ROOT="$(cygpath -w "$KIT")" pyt
 echo "== 1. Arranque (dos veces: la segunda sustituye el enlace de la primera)"
 arrancar | tee "$H/arranque1.json"
 arrancar | tee "$H/arranque2.json"
-if grep -q "falló" "$H/arranque1.json" "$H/arranque2.json"; then echo "MAL: el arranque avisa de un fallo"; exit 1; fi
+# el aviso sale en JSON con la ó escapada (\u00f3): se buscan las dos formas
+if grep -qF -e "falló" -e 'fall\u00f3' "$H/arranque1.json" "$H/arranque2.json"; then echo "MAL: el arranque avisa de un fallo"; exit 1; fi
 ls -l "$H/daotomata-equipo/bin/docs.mjs"
 cmd //c dir "$(cygpath -w "$H/daotomata-equipo")" | grep -i "junction\|unión" || { echo "MAL: bin no es una unión"; exit 1; }
 
