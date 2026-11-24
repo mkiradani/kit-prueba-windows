@@ -7,6 +7,8 @@ jobs:
   kit:
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v4
+        with: { path: prueba }
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - name: Clonar el paquete
@@ -17,4 +19,4 @@ jobs:
         working-directory: kit
         env:
           DOCS_TOKEN_PRUEBA: ${{ secrets.DOCS_TOKEN_PRUEBA }}
-        run: bash ../windows-docs.sh
+        run: bash ../prueba/windows-docs.sh
