@@ -1,0 +1,20 @@
+# Prueba el paquete del equipo tal como lo reparte la web (https://equipo.daotomata.io/plugin.git) en Windows:
+# (la prueba es copia de pruebas/windows-docs.sh del kit, para poder correrla también contra un paquete viejo)
+# arranque sin administrador, puesta al día sin /bin/sh y subir a Docs un HTML de 3 MB con una cuenta de prueba.
+name: windows
+on: [push, workflow_dispatch]
+jobs:
+  kit:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Clonar el paquete
+        shell: bash
+        run: git clone -q https://equipo.daotomata.io/plugin.git kit && git -C kit log -1 --format=%H && grep -m1 '"version"' kit/mi-claude.json
+      - name: Arranque y subida a Docs
+        shell: bash
+        working-directory: kit
+        env:
+          DOCS_TOKEN_PRUEBA: ${{ secrets.DOCS_TOKEN_PRUEBA }}
+        run: bash ../windows-docs.sh
